@@ -1,0 +1,26 @@
+db> use students;
+switched to db students
+students> db.createCollection("details");
+{ ok: 1 }
+students> db.details.insertMany([{name:"Vaibhav", marks:96}, 
+{name:"Vaibhav", marks:86},{name:"Vaibhav", marks:92}, {name:"Amey", 
+marks:87}, {name:"Amey", marks:74},{name:"Amey", marks:86 }]);
+{
+ acknowledged: true,
+ insertedIds: {
+ '0': ObjectId("653fab39fd39fc552c9f7446"),
+ '1': ObjectId("653fab39fd39fc552c9f7447"),
+ '2': ObjectId("653fab39fd39fc552c9f7448"),
+ '3': ObjectId("653fab39fd39fc552c9f7449"),
+ '4': ObjectId("653fab39fd39fc552c9f744a"),
+ '5': ObjectId("653fab39fd39fc552c9f744b")
+ }
+}
+students> var map = function(){ emit(this.name,this.marks);};
+students> var reduce = function(name,marks) {return Array.sum(marks);};
+students> db.details.mapReduce(map,reduce,{out:"Result"});
+DeprecationWarning: Collection.mapReduce() is deprecated. Use an aggregation instead.
+See https://docs.mongodb.com/manual/core/map-reduce for details.
+{ result: 'Result', ok: 1 }
+students> db.Result.find();
+[ { _id: 'Vaibhav', value: 274 }, { _id: 'Amey', value: 247 } ]

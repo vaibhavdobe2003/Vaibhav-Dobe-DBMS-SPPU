@@ -1,0 +1,101 @@
+db> use movie
+switched to db movie
+movie> db.createCollection('Movie');
+{ ok: 1 }
+movie> db.movie.insert({MName:'Iron
+Man',Production:'Marvel',Area:"Hollywood",Budget:900});
+{
+ acknowledged: true,
+ insertedIds: { '0': ObjectId("65279e825ad3e0191c39e246") }
+}
+movie>
+db.movie.insert({MName:'Thor',Production:'Marvel',Area:"Hollywood",Budg
+et:700});
+{
+ acknowledged: true,
+ insertedIds: { '0': ObjectId("65279e955ad3e0191c39e247") }
+}
+movie> db.movie.insert({MName:'Tom and 
+Jerry',Production:'WB',Area:"Hollywood",Budget:400});
+{
+ acknowledged: true,
+ insertedIds: { '0': ObjectId("65279eb05ad3e0191c39e248") }
+}
+movie> 
+db.movie.insert({MName:'Jailer',Production:'Goldmines',Area:"Hollywood",B
+udget:600});
+{
+ acknowledged: true,
+ insertedIds: { '0': ObjectId("65279eef5ad3e0191c39e249") }
+}
+movie> db.movie.insert({MName:'Bahubali',Production:'Dharma 
+Prod.',Area:"Bollywood",Budget:300});
+{
+ acknowledged: true,
+ insertedIds: { '0': ObjectId("65279f6a5ad3e0191c39e24a") }
+}
+
+movie> db.movie.insert({MName:'Jawan',Production:'Red 
+Chillies',Area:"Bollywood",Budget:300});
+{
+ acknowledged: true,
+ insertedIds: { '0': ObjectId("65279fab5ad3e0191c39e24b") }
+}
+
+movie> db.movie.find();
+[
+{
+_id: 
+ObjectId("65279e825ad3e0191c39e246"),
+MName: 'Iron Man',
+Production: 
+'Marvel',Area: 
+'Hollywood',
+Budget: 900
+},
+{
+_id:
+ObjectId("65279eb05ad3e0191c39e248"),
+MName: 'Tom and Jerry',
+Production: 
+'WB', Area: 
+'Hollywood',
+Budget: 400
+},
+{
+_id: 
+ObjectId("65279eef5ad3e0191c39e249"),
+MName: 'Jailer',
+Production: 'Sun 
+Pictures',Area:
+'Tollywood', Budget:
+600
+},
+{
+_id: 
+ObjectId("65279f6a5ad3e0191c39e24a"),
+MName: 'Bahubali',
+Production: 'Dharma 
+Prod.',Area: 'Bollywood',
+Budget: 500
+},
+{
+_id:
+ObjectId("65279fab5ad3e0191c39e24b"),
+MName: 'Jawan',
+Production: 'Red 
+Chillies',Area: 
+'Bollywood', Budget:
+300
+}
+]
+movie> db.movie.aggregate([{$group: {_id: "",Budget: { $max:"$Budget"}}}]);
+[ { _id: '', Budget: 900} ]
+movie> db.movie.aggregate([{$group: {_id: "",Budget: { $min:"$Budget"}}}]);
+[ { _id: '', Budget: 300 } ]
+movie> db.movie.aggregate([{$group: {_id: "",Budget: { $first:"$Budget"}}}]);
+[ { _id: '', Budget: 900 } ]
+movie> db.movie.aggregate([{$group: {_id: "",Budget: { $last:"$Budget"}}}]);
+[ { _id: '', Budget: 300 } ]
+movie> db.movie.aggregate([{$group: {_id: "",Budget: { $sum:"$Budget"}}}]);
+[ { _id: '', Budget: 2700 } 

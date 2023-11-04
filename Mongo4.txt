@@ -1,0 +1,56 @@
+import pymongo
+client=pymongo.MongoClient("mongodb://localhost:27017")
+db=client["student"]
+collection=db["stud"]
+def create_data():
+ r=int(input("Enter roll no: "))
+ n=input("Enter name: ")
+ m=input("Enter Marks: ")
+ data={"Roll No":r,"Name":n,"Marks":m}
+ insert_doc=collection.insert_one(data)
+ print("Record Inserted") 
+ 
+def show():
+ show_data=collection.find()
+ for data in show_data:
+ 	print(data)
+ 
+def update():
+ r=int(input("Enter roll no to Update: "))
+ m=input("Enter Marks: ")
+ update_multiple = collection.update_many({"Roll No": r}, {"$set":{ "Marks": m}})
+ print(update_multiple)
+ condition={"Roll No":r}
+ val={"$set":{"Marks":m}}
+ update_single = collection.update_one(condition,val) 
+ print(update_single)
+def delete():
+ r=int(input("Enter roll no to Delete: "))
+ delt={"Roll No": r}
+ collection.delete_one(delt)
+ print("Record Deleted Roll No:",r)
+while True: 
+ print("\nMAIN MENU") 
+ print("1. Insert") 
+ print("2. Update") 
+ print("3. Delete") 
+ print("4. Display")
+ print("5. Exit")
+ choice = int(input("Enter the Choice:")) 
+ 
+ if choice == 1:
+ 	create_data()
+ 
+ elif choice == 2:
+ 	update()
+ 
+ elif choice == 3:
+ 	delete()
+ 
+ elif choice == 4:
+ 	show()
+ 
+ elif choice == 5: 
+ 	break 
+ else: 
+ 	print("Oops! Incorrect Choice.")

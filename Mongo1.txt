@@ -1,0 +1,145 @@
+db> use movie
+switched to db movie
+movie> db.createCollection('Movie');
+{ ok: 1 }
+movie> db.movie.insert({MName:'Iron
+Man',Production:'Marvel',Area:"Hollywood",Budget:"900cr"});
+{
+ acknowledged: true,
+ insertedIds: { '0': ObjectId("65279e825ad3e0191c39e246") }
+}
+movie>
+db.movie.insert({MName:'Thor',Production:'Marvel',Area:"Hollywood",Budg
+et:"700cr"});
+{
+ acknowledged: true,
+ insertedIds: { '0': ObjectId("65279e955ad3e0191c39e247") }
+}
+movie> db.movie.insert({MName:'Tom and 
+Jerry',Production:'WB',Area:"Hollywood",Budget:"400cr"});
+{
+ acknowledged: true,
+ insertedIds: { '0': ObjectId("65279eb05ad3e0191c39e248") }
+}
+movie> 
+db.movie.insert({MName:'Jailer',Production:'Goldmines',Area:"Hollywood",B
+udget:"600cr"});
+{
+ acknowledged: true,
+ insertedIds: { '0': ObjectId("65279eef5ad3e0191c39e249") }
+}
+movie> db.movie.insert({MName:'Bahubali',Production:'Dharma 
+Prod.',Area:"Bollywood",Budget:"300cr"});
+{
+ acknowledged: true,
+ insertedIds: { '0': ObjectId("65279f6a5ad3e0191c39e24a") }
+}
+Name: Vaibhav Dobe
+ Roll No:13144
+movie> db.movie.insert({MName:'Jawan',Production:'Red 
+Chillies',Area:"Bollywood",Budget:"300cr"});
+{
+ acknowledged: true,
+ insertedIds: { '0': ObjectId("65279fab5ad3e0191c39e24b") }
+}
+movie> db.movie.find();
+[
+ {
+ _id: ObjectId("65279e825ad3e0191c39e246"),
+ MName: 'Iron Man',
+ Production: 'Marvel',
+ Area: 'Hollywood',
+ Budget: '900cr'
+ },
+ {
+ _id: ObjectId("65279e955ad3e0191c39e247"),
+ MName: 'Thor',
+ Production: 'Marvel',
+ Area: 'Hollywood',
+ Budget: '700cr'
+ },
+ {
+ _id: ObjectId("65279eb05ad3e0191c39e248"),
+ MName: 'Tom and Jerry',
+ Production: 'WB',
+ Area: 'Hollywood',
+ Budget: '400cr'
+ },
+ {
+ _id: ObjectId("65279eef5ad3e0191c39e249"),
+ MName: 'Jailer',
+ Production: 'Goldmines',
+ Area: 'Hollywood',
+ Budget: '600cr'
+ },
+ {
+Name: Vaibhav Dobe
+ Roll No:13144
+ _id: ObjectId("65279f6a5ad3e0191c39e24a"),
+ MName: 'Bahubali',
+ Production: 'Dharma Prod.',
+ Area: 'Bollywood',
+ Budget: '300cr'
+ },
+ {
+ _id: ObjectId("65279fab5ad3e0191c39e24b"),
+ MName: 'Jawan',
+ Production: 'Red Chillies',
+ Area: 'Bollywood',
+ Budget: '300cr'
+ }
+]
+movie> db.movie.updateOne({MName:"Jailer"},{$set:{Area:'Tollywood'}});
+{
+ acknowledged: true,
+ insertedId: null,
+ matchedCount: 1,
+ modifiedCount: 1,
+ upsertedCount: 0
+}
+movie> db.movie.find({MName:"Jailer"})
+[
+ {
+ _id: ObjectId("65279eef5ad3e0191c39e249"),
+ MName: 'Jailer',
+ Production: 'Sun Pictures',
+ Area: 'Tollywood',
+ Budget: '600cr'
+ }
+movie> db.movie.remove({MName:"Thor"});
+{ acknowledged: true, deletedCount: 1 }
+movie> db.movie.find({Budget:{$gt:"500cr"}});
+[
+ {
+Name: Vaibhav Dobe
+ Roll No:13144
+ _id: ObjectId("65279e825ad3e0191c39e246"),
+ MName: 'Iron Man',
+ Production: 'Marvel',
+ Area: 'Hollywood',
+ Budget: '900cr'
+ },
+ {
+ _id: ObjectId("65279e955ad3e0191c39e247"),
+ MName: 'Thor',
+ Production: 'Marvel',
+ Area: 'Hollywood',
+ Budget: '700cr'
+ },
+ {
+ _id: ObjectId("65279eef5ad3e0191c39e249"),
+ MName: 'Jailer',
+ Production: 'Sun Pictures',
+ Area: 'Tollywood',
+ Budget: '600cr'
+ }
+]
+movie> db.movie.find({$and:[{Production:"Marvel"},{Area:"Hollywood"}]});
+[
+ {
+ _id: ObjectId("65279e825ad3e0191c39e246"),
+ MName: 'Iron Man',
+ Production: 'Marvel',
+ Area: 'Hollywood',
+ Budget: '900cr'
+ }
