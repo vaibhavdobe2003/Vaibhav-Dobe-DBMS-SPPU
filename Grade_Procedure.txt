@@ -1,0 +1,94 @@
+******Proc_grade.sql
+
+create or replace procedure proc_grade(rollno in number,marks in number,grade out varchar2) is
+begin
+if marks<=1500 and marks>=990 then
+grade:='distinction';
+elsif marks<=989 and marks>=900 then
+grade:='1st class';
+elsif marks<=899 and marks>=825 then
+grade:='2nd class';
+else
+grade:='fail';
+end if;
+end;
+/
+
+
+*******Call.sql
+
+declare
+roll int;
+g varchar(20);
+m int;
+begin
+roll:=&roll;
+select rollno,marks into roll,m from stud_mark where rollno=roll;
+proc_grade(roll,m,g);
+Update stud_result set class=g where rollno=roll;
+end;
+/
+OUTPUT
+SQL> create table stud_mark(rollno int, name varchar(20), marks int);
+Table created.
+SQL> create table stud_result(rollno int,name varchar(20),class varchar(20));
+Table created.
+SQL> insert into stud_mark values(1,'Vaibhav',1400);
+1 row created.
+SQL> insert into stud_mark values(2,'Amey',970);
+1 row created.
+SQL> insert into stud_mark values(3,'Dinesh',760);
+1 row created.
+SQL> insert into stud_mark values(4,'Priyanka',800);
+1 row created.
+SQL> insert into stud_mark values(5,'Rupali',1130);
+1 row created.
+SQL> commit;
+Commit complete.
+
+SQL> select * from stud_mark;
+ ROLLNO NAME MARKS
+---------- -------------------- ----------
+ 1 Vaibhav 1400
+ 2 Amey 970
+ 3 Dinesh 760
+ 4 Priyanka 800
+ 5 Rupali 1130
+SQL> insert into stud_result(rollno,name) values(1,'Vaibhav');
+1 row created.
+SQL> insert into stud_result(rollno,name) values(2,'Amey');
+1 row created.
+SQL> insert into stud_result(rollno,name) values(3,'Dinesh');
+1 row created.
+SQL> insert into stud_result(rollno,name) values(4,'Priyanka');
+1 row created.
+SQL> insert into stud_result(rollno,name) values(5,'Rupali');
+1 row created.
+SQL> @proc_grade.sql
+Procedure created.
+SQL> @call.sql
+Enter value for roll: 1
+old 6: roll:=&roll;
+new 6: roll:=1;
+PL/SQL procedure successfully completed.
+SQL> select * from stud_result;
+ ROLLNO NAME CLASS
+---------- -------------------- --------------------
+ 1 Vaibhav distinction
+ 2 Amey
+ 3 Dinesh
+ 4 Priyanka
+ 5 Rupali
+SQL> @call.sql
+Enter value for roll: 4
+old 6: roll:=&roll;
+new 6: roll:=4;
+PL/SQL procedure successfully completed.
+SQL> select * from stud_result;
+ ROLLNO NAME CLASS
+---------- -------------------- --------------------
+ 1 Vaibhav distinction
+ 2 Amey
+ 3 Dinesh
+ 4 Priyanka fail
+ 5 Rupali
