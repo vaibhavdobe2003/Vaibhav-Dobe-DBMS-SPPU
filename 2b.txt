@@ -1,0 +1,113 @@
+mysql> CREATE table student(roll_no int,name varchar(20),age int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT into student values('1','ram','20');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT into student values('3','radha','20');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT into student values('2','pavan','19');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT into student values('5','vishal','18');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> DESC student;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| roll_no | int         | YES  |     | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
+| age     | int         | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE student MODIFY roll_no int primary key;
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE student ADD address varchar(20) NOT NULL;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+mysql> ALTER TABLE student ADD email_id varchar(20);
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++---------+--------+------+---------+----------+
+| roll_no | name   | age  | address | email_id |
++---------+--------+------+---------+----------+
+|       1 | ram    |   20 |         | NULL     |
+|       2 | pavan  |   19 |         | NULL     |
+|       3 | radha  |   20 |         | NULL     |
+|       5 | vishal |   18 |         | NULL     |
++---------+--------+------+---------+----------+
+4 rows in set (0.00 sec)
+mysql> CREATE INDEX college on student(name,age);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> CREATE  UNIQUE INDEX branch  on student(name,email_id);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC student;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| roll_no  | int         | NO   | PRI | NULL    |       |
+| name     | varchar(20) | YES  | MUL | NULL    |       |
+| age      | int         | YES  |     | NULL    |       |
+| address  | varchar(20) | NO   |     | NULL    |       |
+| email_id | varchar(20) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select * from student;
++---------+--------+------+---------+----------+
+| roll_no | name   | age  | address | email_id |
++---------+--------+------+---------+----------+
+|       1 | ram    |   20 |         | NULL     |
+|       2 | pavan  |   19 |         | NULL     |
+|       3 | radha  |   20 |         | NULL     |
+|       5 | vishal |   18 |         | NULL     |
++---------+--------+------+---------+----------+
+4 rows in set (0.00 sec)
+
+mysql> SHOW INDEX FROM student;
++---------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table   | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++---------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| student |          0 | PRIMARY  |            1 | roll_no     | A         |           4 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+| student |          0 | branch   |            1 | name        | A         |           4 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+| student |          0 | branch   |            2 | email_id    | A         |           4 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+| student |          1 | college  |            1 | name        | A         |           4 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+| student |          1 | college  |            2 | age         | A         |           4 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
++---------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+5 rows in set (0.01 sec)
+
+mysql> ALTER TABLE student DROP INDEX college;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> CREATE VIEW division AS SELECT age,name FROM student WHERE roll_no=1;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from age,name;
+ERROR 1146 (42S02): Table 'mansid.age' doesn't exist
+mysql> select * from [age,name];
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '[age,name]' at line 1
+mysql> select * from student;
++---------+--------+------+---------+----------+
+| roll_no | name   | age  | address | email_id |
++---------+--------+------+---------+----------+
+|       1 | ram    |   20 |         | NULL     |
+|       2 | pavan  |   19 |         | NULL     |
+|       3 | radha  |   20 |         | NULL     |
+|       5 | vishal |   18 |         | NULL     |
++---------+--------+------+---------+----------+
+4 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)

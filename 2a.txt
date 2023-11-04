@@ -1,0 +1,167 @@
+mysql> create database bank;
+Query OK, 1 row affected (0.00 sec)
+mysql> use bank
+Database changed
+mysql> create table customer(fname char (10),lname char (10),address varchar (30));
+Query OK, 0 rows affected (0.01 sec)
+mysql> desc customer;
++---------+-------------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| fname | char(10) | YES | | NULL | |
+| lname | char(10) | YES | | NULL | |
+| address | varchar(30) | YES | | NULL | |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+mysql> alter table customer add pancard varchar (15) unique key;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0 Duplicates: 0 Warnings: 0
+mysql> desc customer;
++---------+-------------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| fname | char(10) | YES | | NULL | |
+| lname | char(10) | YES | | NULL | |
+| address | varchar(30) | YES | | NULL | |
+| pancard | varchar(15) | YES | UNI | NULL | |
++---------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+mysql> alter table customer add mname varchar (10) ;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0 Duplicates: 0 Warnings: 0
+mysql> desc customer;
++---------+-------------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| fname | char(10) | YES | | NULL | |
+| lname | char(10) | YES | | NULL | |
+| address | varchar(30) | YES | | NULL | |
+| pancard | varchar(15) | YES | UNI | NULL | |
+| mname | varchar(10) | YES | | NULL | |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+mysql> create table account(ac_no int,fname varchar (10),lname varchar (10),ac_type varchar 
+(10),balance float);
+Query OK, 0 rows affected (0.01 sec)
+mysql> create table branch(br_code int, bank_name varchar (30),address varchar (30));
+Query OK, 0 rows affected (0.01 sec)
+mysql> desc branch
+ -> ;
++-----------+-------------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| br_code | int | YES | | NULL | |
+| bank_name | varchar(30) | YES | | NULL | |
+| address | varchar(30) | YES | | NULL | |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+mysql> desc account
+ -> ;
++---------+-------------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| ac_no | int | YES | | NULL | |
+| fname | varchar(10) | YES | | NULL | |
+| lname | varchar(10) | YES | | NULL | |
+| ac_type | varchar(10) | YES | | NULL | |
+| balance | float | YES | | NULL | |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+mysql> alter table branch add IFSC_code varchar (20);
+Query OK, 0 rows affected (0.01 sec)
+Records: 0 Duplicates: 0 Warnings: 0
+mysql> desc customer
+ -> ;
++---------+-------------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| fname | char(10) | YES | | NULL | |
+| lname | char(10) | YES | | NULL | |
+| address | varchar(30) | YES | | NULL | |
+| pancard | varchar(15) | YES | UNI | NULL | |
+| mname | varchar(10) | YES | | NULL | |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+mysql> insert into customer values('Vaibhav','Dobe','Jalgaon Jamod','ASDFG1234F','S');
+Query OK, 1 row affected (0.00 sec)
+mysql> insert into customer values('Om','Jadhav','Pune','QWERT1234H','X');
+Query OK, 1 row affected (0.00 sec)
+mysql> insert into account values(1234123412,'Vaibhav','Dobe','Saving',10000);
+Query OK, 1 row affected (0.00 sec)
+mysql> insert into account values(1234222222,'Om','Jadhav','Current',5000);
+Query OK, 1 row affected (0.00 sec)
+mysql> desc branch;
++-----------+-------------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| br_code | int | YES | | NULL | |
+| bank_name | varchar(30) | YES | | NULL | |
+| address | varchar(30) | YES | | NULL | |
+| IFSC_code | varchar(20) | YES | | NULL | |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+mysql> insert into branch values(1234,'SBI','Pune','SBIN0001052');
+Query OK, 1 row affected (0.00 sec)
+mysql> insert into branch values(1124,'SBI','Jalgaon Jamod','SBIN0003519');
+Query OK, 1 row affected (0.00 sec)
+mysql> select * from branch;
++---------+-----------+---------------+-------------+
+| br_code | bank_name | address | IFSC_code |
++---------+-----------+---------------+-------------+
+| 1234 | SBI | Pune | SBIN0001052 |
+| 1124 | SBI | Jalgaon Jamod | SBIN0003519 |
++---------+-----------+---------------+-------------+
+2 rows in set (0.00 sec)
+mysql> select * from customer;
++---------+--------+---------------+------------+-------+
+| fname | lname | address | pancard | mname |
++---------+--------+---------------+------------+-------+
+| Vaibhav | Dobe | Jalgaon Jamod | ASDFG1234F | S |
+| Om | Jadhav | Pune | QWERT1234H | X |
++---------+--------+---------------+------------+-------+
+2 rows in set (0.00 sec)
+mysql> select * from account;
++------------+---------+--------+---------+---------+
+| ac_no | fname | lname | ac_type | balance |
++------------+---------+--------+---------+---------+
+| 1234123412 | Vaibhav | Dobe | Saving | 10000 |
+| 1234222222 | Om | Jadhav | Current | 5000 |
++------------+---------+--------+---------+---------+
+2 rows in set (0.00 sec)
+mysql> alter table customer modify column fname varchar (10);
+Query OK, 2 rows affected (0.02 sec)
+Records: 2 Duplicates: 0 Warnings: 0
+mysql> alter table customer modify column address varchar(20) default 'XYZ';
+Query OK, 2 rows affected (0.04 sec)
+Records: 2 Duplicates: 0 Warnings: 0
+mysql> desc customer
+ -> ;
++---------+-------------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| fname | varchar(10) | YES | | NULL | |
+| lname | char(10) | YES | | NULL | |
+| address | varchar(20) | YES | | XYZ | |
+| pancard | varchar(15) | YES | UNI | NULL | |
+| mname | varchar(10) | YES | | NULL | |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+mysql> select * from customer;
++---------+--------+---------------+------------+-------+
+| fname | lname | address | pancard | mname |
++---------+--------+---------------+------------+-------+
+| Vaibhav | Dobe | Jalgaon Jamod | ASDFG1234F | S |
+| Om | Jadhav | Pune | QWERT1234H | X |
++---------+--------+---------------+------------+-------+
+2 rows in set (0.00 sec)
+mysql> insert into customer (fname,lname,pancard,mname)values('AAA','XXX','QEWYT2341g','DDD');
+Query OK, 1 row affected (0.00 sec)
+mysql> select * from customer;
++---------+--------+---------------+------------+-------+
+| fname | lname | address | pancard | mname |
++---------+--------+---------------+------------+-------+
+| Vaibhav | Dobe | Jalgaon Jamod | ASDFG1234F | S |
+| Om | Jadhav | Pune | QWERT1234H | X |
+| AAA | XXX | XYZ | QEWYT2341g | DDD |
++---------+--------+---------------+------------+-------+
+3 rows in set (0.00 sec)
