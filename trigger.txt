@@ -1,0 +1,44 @@
+create table Library(book_id int,book_name varchar(50),price float); 
+create table Library_Audit as select * from Library; 
+SQL> insert into Library values(101,'DBMS',500);
+SQL> insert into Library values(102,'TOC',400);
+SQL> insert into Library values(103,'IOT',350); 
+Tigger.sql
+create or replace trigger trg_library_adt
+after update or delete on Library for each row
+declare
+diff_price float;
+begin
+if updating then
+insert into Library_Audit values (:old.book_id,:old.book_name,:old.price);
+diff_price:=:new.price-:old.price;
+dbms_output.put_line('Difference between price:'||diff_price);
+elsif deleting then
+insert into Library_Audit values (:old.book_id,:old.book_name,:old.price);
+end if;
+end;
+/
+OUTPUT
+SQL> @trigger.sql;
+Trigger created.
+SQL> select * from library;
+ BOOK_ID BOOK_NAME PRICE
+---------- -------------------------------------------------- ----------
+ 101 DBMS 500
+ 102 TOC 400
+ 103 IOT 350
+
+SQL> select * from library_audit;
+no rows selected
+SQL> select * from library_audit;
+no rows selected
+SQL> UPDATE library SET price=300 where book_id=103;
+Difference between price:-50
+1 row updated.
+SQL> delete from library where book_id=103;
+1 row deleted.
+SQL> select * from library_audit;
+ BOOK_ID BOOK_NAME PRICE
+---------- -------------------------------------------------- ----------
+ 103 IOT 350
+ 103 IOT 300
