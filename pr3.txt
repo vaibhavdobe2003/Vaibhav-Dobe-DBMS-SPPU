@@ -1,0 +1,111 @@
+create database bank;
+
+use bank;
+
+create table branch_master(branch_id int primary key, branch_name varchar(30));
+
+create table employee_master(emp_no int primary key, emp_name varchar(30), branch_id int, salary int(10), dept varchar(20), manager_id int, foreign key(branch_id) references branch_master(branch_id));
+
+create table contact_details(emp_id int, emailid varchar(40), phoneno int(11), foreign
+key(emp_id) references employee_master(emp_no) on delete set null);
+
+create table emp_address_details(emp_id int, street varchar(20), city varchar(20), state varchar(20), foreign key(emp_id) references employee_master(emp_no));
+
+create table branch_address(branch_id int, city varchar(20), state varchar(20), foreign key(branch_id) references branch_master(branch_id));
+
+insert into branch_master values(1,"vadgaon");
+insert into branch_master values(2,"park street");
+insert into branch_master values(3,"pimpri");
+insert into branch_master values(4,"panvel");
+insert into branch_master values(5,"model colony");
+select * from branch_master;
+
+insert into employee_master values(10,"aryan",2,40000, "manager", null);
+insert into employee_master values(11,"kiran",4,5000,"admin",10);
+insert into employee_master values(12,"carol",1,60000,"assistant",10);
+insert into employee_master values(13,"peter",3,120000,"senior",10);
+insert into employee_master values(14,"bob",5,110000,"HR",10);
+select * from employee_master;
+
+insert into contact_details values(11,"kiran@gmail.com",982534876);
+insert into contact_details values(10,"aryan@gmail.com",876548765);
+insert into contact_details values(13,"peter@hotmail.com",736549387);
+select * from contact_details;
+
+insert into emp_address_details values(10,"vadgaon","pune","maharashtra");
+insert into emp_address_details values(11,"link road","mumbai","maharashtra");
+insert into emp_address_details values(12,"park tree","kolkata","west bengal");
+insert into emp_address_details values(13,"roha","bangalore","karnataka");
+insert into emp_address_details values(14,"street roa","cuttack","orissa");
+select * from emp_address_details;
+
+insert into branch_address values(1,"pune","maharashtra");
+insert into branch_address values(2,"mumbai","maharashtra");
+insert into branch_address values(3,"kolkata","west bengal");
+insert into branch_address values(4,"bangalore","karnataka");
+insert into branch_address values(5,"cuttack","orissa");
+select * from branch_address;
+
+Queries:
+//1 list the employee details along with the branch name using inner join and in order of employee no.
+
+select emp_no, emp_name, branch_name from employee_master e inner join branch_master b on e.branch_id = b.branch_id order by emp_no;
+
+//2 list the details of employees who belong to admin dept along the branch name to which they belong.
+
+select emp_name, dept, branch_name from branch_master b,employee_master e where b.branch_id = e.branch_id and dept="admin";
+
+//3 list the employee name along with the phn no and city(using inner join).
+
+select emp_name,phoneno,city from employee_master e inner join emp_address_details a on e.emp_no=a.emp_id inner join contact_details c on e.emp_no=c.emp_id;
+
+//4 list the employee name with the contact details if any. ---left join
+
+select emp_name, emailid, phoneno from contact_details c left join employee_master e on e.emp_no=c.emp_id;
+
+//5 list the employee contact details irrespective of whether they are working or have left.
+
+select emp_name, emailid, phoneno from contact_details c right join employee_master e on e.emp_no=c.emp_id;
+
+//6 retrieve the employee name and their respective manager name.
+
+select e1.emp_name, e2.emp_name as Manager from employee_master e1, employee_master e2 where e1.manager_id = e2.emp_no;
+
+
+//8 List the employee names who work at vadgaon branch along with the city of that employee.
+
+select emp_no, emp_name, city from employee_master e, emp_address_details a,branch_master b where e.branch_id=b.branch_id and b.branch_name = "vadgaon" ande.emp_no=a.emp_id;
+
+// 9 find the employee who works at vadgaon branch with salaries more than 10000.list the employee names with the streets and city they live in.
+
+select emp_name, street, city, salary from employee_master e, emp_address_details a where e.emp_no = a.emp_id and e.emp_no in(select emp_no from branch_master b, employee_master c where branch_name = "vadgaon" and salary>10000 and c.branch_id=b.branch_id);
+
+//10 find the employees who live and work in same city.
+
+select emp_name from employee_master e, branch_address b, emp_address_details d where b.branch_id = e.branch_id and e.emp_no=d.emp_id and b.city=d.city;
+
+//11 find the employee whose salary are more than the salary of everybody who works at branch vadgaon.
+
+select emp_name from employee_master where salary=(select max(salary) from employee_master e, branch_master b where branch_name="vadgaon" and b.branch_id=e.branch_id);
+
+//12 create a view which will contain total employees at each branch.
+
+update employee_master set branch_id=1 where emp_no=10;
+
+create view totemp as select branch_name,count(emp_no) as TotalEmployees from employee_master e,branch_master b where e.branch_id=b.branch_id group by e.branch_id;
+
+select * from totemp;
+
+//13 list the branch name where employee have a salary more than 100000.
+
+select branch_name from branch_master b, employee_master e where b.branch_id=e.branch_id and salary>100000;
+
+//14 create a view which will show the avgsalary and the total salary at each branch.
+
+create view sal as select branch_name , avg(salary) as average, sum(salary) from employee_master e, branch_master b where b.branch_id=e.branch_id group by e.branch_id;
+
+select * from sal;
+
+//15 find the employee who do not have a job at vadgaon branch.
+
+select emp_name from employee_master e,branch_master b where e.branch_id=b.branch_id and e.branch_id not in(select branch_id from branch_master where branch_name="vadgaon");
