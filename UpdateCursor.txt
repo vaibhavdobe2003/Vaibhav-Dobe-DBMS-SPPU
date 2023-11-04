@@ -1,0 +1,36 @@
+DECLARE 
+rec emp%rowtype;
+CURSOR c1 is SELECT * FROM emp WHERE salary<9000 for UPDATE;
+BEGIN 
+OPEN c1;
+LOOP 
+FETCH c1 INTO rec;
+EXIT WHEN c1%NOTFOUND;
+UPDATE emp SET salary=salary+5000 WHERE current of c1;
+end loop;
+close c1;
+end;
+/
+OUTPUT
+SQL> create table emp(id int ,name varchar(20),salary float);
+Table created.
+SQL> insert into emp values(1,'Vaibhav',7000);
+1 row created.
+SQL> insert into emp values(2,'Priyanka',5000);
+1 row created.
+SQL> insert into emp values(3,'Amey',10000);
+1 row created.
+SQL> Select * from emp;
+ ID NAME SALARY
+---------- -------------------- ----------
+ 1 Vaibhav 7000
+ 2 Priyanka 5000
+ 3 Amey 10000
+SQL> @updateCursor.sql
+PL/SQL procedure successfully completed.
+SQL> select * from emp;
+ ID NAME SALARY
+---------- -------------------- ----------
+ 1 Vaibhav 12000
+ 2 Priyanka 10000
+ 3 Amey 10000

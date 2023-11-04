@@ -1,0 +1,57 @@
+set serveroutput on;
+declare
+ cursor cu1 is select Roll,Name from O_RollCall;
+ cursor cu2 is select Roll from N_RollCall;
+ rno int;
+ nm varchar(20);
+ rno2 int;
+ begin 
+open cu1;
+open cu2; 
+loop 
+fetch cu1 into rno,nm; 
+fetch cu2 into rno2; 
+exit when cu1%found = false; 
+if rno2 <> rno then 
+insert into N_RollCall values(rno,nm); 
+end if; 
+end loop; 
+close cu1; 
+close cu2;
+end;
+/
+OUTPUT:
+SQL> create table N_RollCall (Roll int,Name varchar(20));
+Table created.
+SQL> create table O_RollCall (Roll int,Name varchar(20));
+Table created.
+SQL> insert into O_RollCall values(1,'Vaibhav');
+1 row created.
+SQL> insert into O_RollCall values(1,'Amey');
+1 row created.
+SQL> Update O_RollCall set roll=2 where name='Amey';
+1 row updated.
+SQL> insert into O_RollCall values(3,'Dinesh');
+1 row created.
+SQL> insert into O_RollCall values(4,'Priyanka');
+1 row created.
+SQL> insert into O_RollCall values(5,'Rupali');
+1 row created.
+SQL> insert into N_RollCall values(1,'Vaibhav');
+1 row created.
+SQL> insert into N_RollCall values(4,'Priyanka');
+1 row created.
+SQL> insert into N_RollCall values(5,'Rupali');
+1 row created.
+SQL> @cursor.sql
+PL/SQL proceure successfully completed.
+SQL> select *from N_RollCall;
+ ROLL NAME
+---------- --------------------
+ 1 Vaibhav
+ 4 Priyanka
+ 5 Rupali
+ 2 Amey
+ 3 Dinesh
+ 
+5 rows selected

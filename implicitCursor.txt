@@ -1,0 +1,47 @@
+DECLARE 
+total_rows number(2); 
+BEGIN 
+ UPDATE emp 
+ SET salary = salary + 5000; 
+ IF sql%notfound THEN 
+ dbms_output.put_line('no employees updated'); 
+ ELSIF sql%found THEN 
+ total_rows := sql%rowcount; 
+ dbms_output.put_line( total_rows || ' employee updated '); 
+ END IF;
+ END; 
+/ 
+OUTPUT
+SQL> create table emp(id int,name varchar(20),salary int);
+Table created.
+SQL> insert into emp values(101,'Vaibhav',80000);
+1 row created.
+SQL> insert into emp values(102,'Amey',50000);
+1 row created.
+SQL> insert into emp values(103,'Priyanka',60000);
+1 row created.
+SQL> insert into emp values(104,'Dinesh',40000);
+1 row created.
+SQL> insert into emp values(105,'Rupali',65000);
+1 row created.
+SQL> select * from customers;
+ ID NAME SALARY
+---------- -------------------- ----------
+
+ 101 Vaibhav 80000
+ 102 Amey 50000
+ 103 Priyanka 60000
+ 104 Dinesh 40000
+ 105 Rupali 65000
+SQL> set serveroutput on;
+SQL> @impli.sql;
+5 customers updated
+PL/SQL procedure successfully completed.
+SQL> select * from customers;
+ ID NAME SALARY
+---------- -------------------- ----------
+ 101 Vaibhav 85000
+ 102 Amey 55000
+ 103 Priyanka 65000
+ 104 Dinesh 45000
+ 105 Rupali 70000

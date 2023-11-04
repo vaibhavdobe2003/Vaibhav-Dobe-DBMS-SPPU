@@ -1,0 +1,20 @@
+DECLARE 
+rec emp%rowtype;
+CURSOR c2 is SELECT * FROM emp WHERE salary<11000 for UPDATE;
+BEGIN 
+OPEN c2;
+LOOP 
+FETCH c2 INTO rec;
+EXIT WHEN c2%NOTFOUND;
+DELETE FROM emp WHERE current of c2;
+end loop;
+close c2;
+end;
+/
+OUTPUT
+SQL> @deleteCursor.sql
+PL/SQL procedure successfully completed.
+SQL> select * from emp;
+ ID NAME SALARY
+---------- -------------------- ----------
+ 1 Vaibhav 12000
