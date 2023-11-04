@@ -1,0 +1,136 @@
+DECLARE 
+
+r int;
+bn varchar(20);
+amt float;
+d int;
+idt date;
+rdt date;
+
+BEGIN
+
+r:=&r;
+bn:='&bn';
+select idate into idt from borrower where roll=r and book_name=bn and status='I';
+select sysdate into rdt from dual;
+d:=rdt-idt;
+
+if d<15 then
+   dbms_output.put_line('No Fine');
+elsif d>15 and d<30 then
+   amt:=d*5;
+elsif d>30 then
+   amt:=d*50;
+else 
+   dbms_output.put_line('Invalid input');
+end if;
+
+if amt>0 then
+   insert into fine values(r,rdt,amt);
+end if;
+
+if SQL%found then
+   update borrower set status='R' where roll=r and book_name=bn and status='I';
+end if;
+
+EXCEPTION
+    when No_data_found then
+    dbms_output.put_line('No data found');
+
+end;
+/
+
+
+SQL> create table borrower(roll_no int,name varchar(20),bname varchar(20),idate date,status varchar(5));
+
+Table created.
+
+
+SQL> insert into borrower values(101,'manoday','DBMS','23-AUG-23','I');
+
+1 row created.
+
+SQL> insert into borrower values(102,'amey','TOC','12-JULY-23','I');
+
+1 row created.
+
+SQL> insert into borrower values(103,'vaibhav','IOT','14-JULY-23','I');
+
+1 row created.
+
+SQL> insert into borrower values(104,'hemant','SPOS','14-JULY-23','R');
+
+1 row created.
+
+SQL> select * from borrower;
+
+   ROLL_NO NAME                 BNAME                IDATE     STATU
+---------- -------------------- -------------------- --------- -----
+       101 manoday              DBMS                 23-AUG-23 I
+       102 amey                 TOC                  12-JUL-23 I
+       103 vaibhav              IOT                  14-JUL-23 I
+       104 hemant               SPOS                 14-JUL-23 R
+
+SQL> create table fine (
+  2  roll_no int,
+  3  rdate date,
+  4  amount float);
+
+Table created.
+
+ @demo.sql
+Enter value for r: 101
+old  11: r:=&r;
+new  11: r:=101;
+Enter value for bn: DBMS
+old  12: bn:='&bn';
+new  12: bn:='DBMS';
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from borrower;
+
+   ROLL_NO NAME                 BNAME                IDATE     STATU
+---------- -------------------- -------------------- --------- -----
+       101 manoday              DBMS                 23-AUG-23 R
+       102 amey                 TOC                  12-JUL-23 I
+       103 vaibhav              IOT                  14-JUL-23 I
+       104 hemant               SPOS                 14-JUL-23 R
+
+
+SQL> @demo.sql
+Enter value for r: 102
+old  11: r:=&r;
+new  11: r:=102;
+Enter value for bn: TOC
+old  12: bn:='&bn';
+new  12: bn:='TOC';
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from fine;
+
+   ROLL_NO RDATE         AMOUNT
+---------- --------- ----------
+       102 31-AUG-23       2500
+declare
+r int;
+a float;
+begin
+for r in 5..9 loop
+a:=3.14*r*r;
+insert into cicle values(r,a);
+end loop;
+end;
+/
+OUPUT:
+SQL> @ar_Cicle.sql
+PL/SQL procedure successfully completed.
+SQL> select *from cicle;
+ RADIUS AREA
+---------- ----------
+ 5 78.5
+ 6 113.04
+ 7 153.86
+ 8 200.96
+ 9 254.34
