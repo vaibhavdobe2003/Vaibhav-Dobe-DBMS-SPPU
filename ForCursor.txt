@@ -1,0 +1,30 @@
+//For Cursor
+DECLARE
+ CURSOR c_product
+ IS
+ SELECT * FROM products;
+BEGIN
+ FOR r_product IN c_product
+ LOOP
+ dbms_output.put_line( r_product.product_name || ': $' || r_product.list_price );
+ END LOOP;
+END;
+/
+OUTPUT
+SQL> create table products(product_name varchar(20), list_price float);
+Table created.
+SQL> insert into products values('Notes',70.0);
+1 row created.
+SQL> insert into products values('NoteBook',50.0);
+1 row created.
+SQL> insert into products values('PEN',20.0);
+1 row created.
+SQL> insert into products values('Geometry Box',30.0);
+1 row created.
+SQL> set serveroutput on;
+SQL> @forCRS.sql
+Notes: $70
+NoteBook: $50
+PEN: $20
+Geometry Box: $30
+PL/SQL procedure successfully completed
