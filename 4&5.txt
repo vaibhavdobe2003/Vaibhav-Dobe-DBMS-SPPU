@@ -113,6 +113,9 @@ SQL> select * from fine;
    ROLL_NO RDATE         AMOUNT
 ---------- --------- ----------
        102 31-AUG-23       2500
+
+
+//area of circle
 declare
 r int;
 a float;
