@@ -10,20 +10,17 @@ public static void main(String arg[])
 try{
 Class.forName("com.mysql.jdbc.Driver");
 Connection 
-conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/db","Vaibhav","
-vaibh23");
+conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/db","Vaibhav","vaibh23");
 PreparedStatement stm=null;
 Statement stmt=conn.createStatement();
 int ch;
 Scanner sc=new Scanner(System.in);
-BufferedReader br=new BufferedReader(new 
-InputStreamReader(System.in));
+BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
  
 do{
 int r;
 String n = null;
-System.out.println("Enter Your choice \n1 Insert\n2 
-Update\n3 Delete\n4 Display\n5 Exit");
+System.out.println("Enter Your choice \n1 Insert\n2 Update\n3 Delete\n4 Display\n5 Exit");
 ch=sc.nextInt();
 switch(ch)
 {
@@ -32,23 +29,20 @@ System.out.println("Enter Roll No");
 r=Integer.parseInt(br.readLine());
 System.out.println("Enter Name");
 n=br.readLine();
-String sql = "insert into student "+ " 
-(roll,name)" + " values (?, ?)";
+String sql = "insert into student "+ " (roll,name)" + " values (?, ?)";
 stm = conn.prepareStatement(sql);
-// set param values
+
 stm.setInt(1, r);
  stm.setString(2, n);
-// 3. Execute SQL query
+
 stm.executeUpdate();
 break;
 case 2:
-System.out.println("Enter Roll No to 
-update");
+System.out.println("Enter Roll No to update");
 r=Integer.parseInt(br.readLine());
 System.out.println("Enter Name");
 n=br.readLine();
-String query = "update student set 
-name=? where roll=? ";
+String query = "update student set name=? where roll=? ";
  stm = conn.prepareStatement(query);
 Name: Vaibhav Dobe
  Roll No:13144
@@ -58,8 +52,7 @@ Name: Vaibhav Dobe
 System.out.println("Record updated");
 break;
 case 3:
-System.out.println("Enter Roll No to 
-update");
+System.out.println("Enter Roll No to update");
 r=Integer.parseInt(br.readLine());
 String sql1="DELETE FROM student WHERE 
 roll=?";
@@ -69,15 +62,13 @@ stm.execute();
 System.out.println("Record Deleted");
 break;
 case 4:
-String qr= "SELECT * FROM student ORDER 
-BY roll";
+String qr= "SELECT * FROM student ORDER BY roll";
 ResultSet rs=stmt.executeQuery(qr);
 while(rs.next())
 {
 r=rs.getInt("roll");
 n=rs.getString("name");
-System.out.println("Roll No:"+r+ 
-"\tName:"+n);
+System.out.println("Roll No:"+r+ "\tName:"+n);
 }
 break;
 case 5:System.out.println("Thank You");
