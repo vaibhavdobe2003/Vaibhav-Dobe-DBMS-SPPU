@@ -1,3 +1,4 @@
+package DBconnect;
 import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.*;
@@ -95,7 +96,10 @@ System.out.println(e);
 }
 
 
+
 DATABASE:
 CREATE USER 'Vaibhav'@'localhost' IDENTIFIED BY 'vaibh23';
-Create database Student;
-Create table stud(roll int,name varchar(25));
+GRANT ALL PRIVILEGES ON 'Vaibhav'@'localhost';
+Create database db;
+use db;
+Create table stududent(roll int,name varchar(25));
